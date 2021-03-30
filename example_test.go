@@ -1,11 +1,4 @@
-# wgconf [![Go Reference](https://pkg.go.dev/badge/github.com/gentlemanautomaton/wgconf.svg)](https://pkg.go.dev/github.com/gentlemanautomaton/wgconf)
-
-Package `wgconf` provides a limited set of WireGuard configuration types that can be marshaled as systemd netdev configuration.
-
-## Example
-
-```go
-package main
+package wgconf_test
 
 import (
 	"fmt"
@@ -15,7 +8,7 @@ import (
 	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
 )
 
-func main() {
+func Example() {
 	peers := wgconf.PeerList{
 		{
 			Name:        "Laptop1",
@@ -31,6 +24,16 @@ func main() {
 		},
 	}
 	fmt.Print(peers.NetDev())
+	// Output:
+	// # Laptop1 (alice.laptop)
+	// [WireGuardPeer]
+	// PublicKey=lO/VBDYf0zKo4N+RwnjNsBYMb8Wuw8WUZP00C7CviS0=
+	// AllowedIPs=10.0.0.1/32
+	//
+	// # Laptop2 (bob.laptop)
+	// [WireGuardPeer]
+	// PublicKey=uEVNLxM71801qc3xOYsgvoKjX3AaK6+CV3c8tzjR0iE=
+	// AllowedIPs=10.0.0.2/32,192.168.0.254/32
 }
 
 func ParseKey(key string) wgtypes.Key {
@@ -48,18 +51,3 @@ func ParseIPNet(cidr string) net.IPNet {
 	}
 	return *v
 }
-```
-
-Example Output:
-
-```
-# Laptop1 (alice.laptop)
-[WireGuardPeer]
-PublicKey=lO/VBDYf0zKo4N+RwnjNsBYMb8Wuw8WUZP00C7CviS0=
-AllowedIPs=10.0.0.1/32
-
-# Laptop2 (bob.laptop)
-[WireGuardPeer]
-PublicKey=uEVNLxM71801qc3xOYsgvoKjX3AaK6+CV3c8tzjR0iE=
-AllowedIPs=10.0.0.2/32,192.168.0.254/32
-```
