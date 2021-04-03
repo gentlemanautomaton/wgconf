@@ -15,3 +15,19 @@ func (list PeerList) NetDev() string {
 	}
 	return strings.Join(entries, "\n\n")
 }
+
+// Len returns the number of peers in the list.
+func (list PeerList) Len() int {
+	return len(list)
+}
+
+// Less reports whether the peer with index i must sort before the peer
+// with index j. The order is based on the Compare function.
+func (list PeerList) Less(i, j int) bool {
+	return Compare(list[i], list[j]) < 0
+}
+
+// Swap swaps the peers with indexes i and j.
+func (list PeerList) Swap(i, j int) {
+	list[i], list[j] = list[j], list[i]
+}
