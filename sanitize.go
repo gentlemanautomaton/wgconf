@@ -1,9 +1,7 @@
 package wgconf
 
 import (
-	"net"
 	"regexp"
-	"strings"
 
 	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
 )
@@ -21,32 +19,4 @@ func sanitizeKey(key wgtypes.Key) string {
 		return ""
 	}
 	return key.String()
-}
-
-func sanitizeIPs(ipnets []net.IPNet) string {
-	var addrs []string
-	for _, ipnet := range ipnets {
-		if !validIP(ipnet.IP) || !validMask(ipnet.Mask) {
-			continue
-		}
-		addrs = append(addrs, ipnet.String())
-	}
-	return strings.Join(addrs, ",")
-}
-
-func validIP(ip net.IP) bool {
-	if ip == nil {
-		return false
-	}
-	if ip.To4() != nil {
-		return true
-	}
-	if len(ip) == net.IPv6len {
-		return true
-	}
-	return false
-}
-
-func validMask(mask net.IPMask) bool {
-	return mask != nil
 }

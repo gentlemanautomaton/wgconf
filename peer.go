@@ -2,7 +2,6 @@ package wgconf
 
 import (
 	"fmt"
-	"net"
 	"strings"
 
 	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
@@ -13,7 +12,7 @@ type Peer struct {
 	Name        string
 	Description string
 	PublicKey   wgtypes.Key
-	AllowedIPs  []net.IPNet
+	AllowedIPs  AllowedIPs
 }
 
 // NetDev returns the systemd netdev configuration for the peer.
@@ -22,7 +21,7 @@ func (p Peer) NetDev() string {
 	name := sanitizeComment(p.Name)
 	description := sanitizeComment(p.Description)
 	pubkey := sanitizeKey(p.PublicKey)
-	addrs := sanitizeIPs(p.AllowedIPs)
+	addrs := p.AllowedIPs.String()
 
 	// Reject keyless peers without a comment
 	if name == "" && description == "" && pubkey == "" {
