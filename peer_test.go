@@ -51,7 +51,7 @@ var tests = []PeerTest{
 			PublicKey:   mustParseKey(public),
 			AllowedIPs:  []net.IPNet{mustParseIPNet("192.168.1.1/30")},
 		},
-		NetDev: "# T2 (two)\n[WireGuardPeer]\nPublicKey=aPxGwq8zERHQ3Q1cOZFdJ+cvJX5Ka4mLN38AyYKYF10=\nAllowedIPs=192.168.1.0/30",
+		NetDev: "# T2 (two)\n[WireGuardPeer]\nPublicKey=aPxGwq8zERHQ3Q1cOZFdJ+cvJX5Ka4mLN38AyYKYF10=\nAllowedIPs=192.168.1.1/30",
 	},
 	{
 		Name: "Typical3",
@@ -61,7 +61,7 @@ var tests = []PeerTest{
 			PublicKey:   mustParseKey(public),
 			AllowedIPs:  []net.IPNet{mustParseIPNet("10.0.0.1/22"), mustParseIPNet("192.168.0.254/32"), mustParseIPNet("::/0")},
 		},
-		NetDev: "# T3 (thrice)\n[WireGuardPeer]\nPublicKey=aPxGwq8zERHQ3Q1cOZFdJ+cvJX5Ka4mLN38AyYKYF10=\nAllowedIPs=10.0.0.0/22,192.168.0.254/32,::/0",
+		NetDev: "# T3 (thrice)\n[WireGuardPeer]\nPublicKey=aPxGwq8zERHQ3Q1cOZFdJ+cvJX5Ka4mLN38AyYKYF10=\nAllowedIPs=10.0.0.1/22,192.168.0.254/32,::/0",
 	},
 	{
 		Name: "Filtered1",
@@ -130,11 +130,14 @@ func mustParseKey(key string) wgtypes.Key {
 }
 
 func mustParseIPNet(ipnet string) net.IPNet {
-	_, v, err := net.ParseCIDR(ipnet)
+	ip, network, err := net.ParseCIDR(ipnet)
 	if err != nil {
 		panic(err)
 	}
-	return *v
+	return net.IPNet{
+		IP:   ip,
+		Mask: network.Mask,
+	}
 }
 
 func multilineDiff(actual, wanted string) string {
