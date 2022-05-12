@@ -1,6 +1,8 @@
 package wgconf
 
-import "strings"
+import (
+	"strings"
+)
 
 // PeerList is a list of WireGuard peers.
 type PeerList []Peer

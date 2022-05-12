@@ -28,6 +28,10 @@ type PeerTest struct {
 const public1 = "aPxGwq8zERHQ3Q1cOZFdJ+cvJX5Ka4mLN38AyYKYF10="
 const public2 = "bPxGwq8zERHQ3Q1cOZFdJ+cvJX5Ka4mLN38AyYKYF10="
 const public3 = "cPxGwq8zERHQ3Q1cOZFdJ+cvJX5Ka4mLN38AyYKYF10="
+const public4 = "dPxGwq8zERHQ3Q1cOZFdJ+cvJX5Ka4mLN38AyYKYF10="
+const public5 = "ePxGwq8zERHQ3Q1cOZFdJ+cvJX5Ka4mLN38AyYKYF10="
+const public6 = "fPxGwq8zERHQ3Q1cOZFdJ+cvJX5Ka4mLN38AyYKYF10="
+const public7 = "gPxGwq8zERHQ3Q1cOZFdJ+cvJX5Ka4mLN38AyYKYF10="
 
 var tests = []PeerTest{
 	{

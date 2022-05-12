@@ -1,6 +1,10 @@
 package wgconf
 
-import "bytes"
+import (
+	"bytes"
+	"sort"
+	"strings"
+)
 
 // Compare provides a comparison function for peers. It is used by PeerList to
 // determine its sort order. It returns the following values:
@@ -30,5 +34,60 @@ func Compare(a, b Peer) int {
 		return cmp
 	}
 
+	// Compare names
+	if cmp := strings.Compare(a.Name, b.Name); cmp != 0 {
+		return cmp
+	}
+
+	// Compare descriptions
+	if cmp := strings.Compare(a.Description, b.Description); cmp != 0 {
+		return cmp
+	}
+
 	return 0
+}
+
+// CompareLists compares a with b and determines the differences.
+//
+// Peers are uniquely identified by their public key.
+func CompareLists(a, b PeerList) (added, updated, removed, unchanged PeerList) {
+	// Prepare a map so we can look up existing peers by their public key
+	lookup := make(map[Key]int)
+	for i, peer := range a {
+		lookup[peer.PublicKey] = i
+	}
+
+	// Process each new peer
+	processed := make(map[Key]bool)
+	for _, peer := range b {
+		// When duplicate entries are present, ignore all but the first entry
+		if processed[peer.PublicKey] {
+			continue
+		}
+		if i, found := lookup[peer.PublicKey]; found {
+			if Compare(a[i], peer) == 0 {
+				unchanged = append(unchanged, peer)
+			} else {
+				updated = append(updated, peer)
+			}
+		} else {
+			added = append(added, peer)
+		}
+		processed[peer.PublicKey] = true
+	}
+
+	// Find missing peers
+	for _, peer := range a {
+		if !processed[peer.PublicKey] {
+			removed = append(removed, peer)
+		}
+	}
+
+	// Sort return values
+	sort.Sort(added)
+	sort.Sort(updated)
+	sort.Sort(removed)
+	sort.Sort(unchanged)
+
+	return
 }
