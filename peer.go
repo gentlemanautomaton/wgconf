@@ -7,11 +7,14 @@ import (
 	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
 )
 
+// Key is a public or private key used by WireGuard.
+type Key = wgtypes.Key
+
 // Peer is a WireGuard peer.
 type Peer struct {
 	Name        string
 	Description string
-	PublicKey   wgtypes.Key
+	PublicKey   Key
 	AllowedIPs  AllowedIPs
 }
 
