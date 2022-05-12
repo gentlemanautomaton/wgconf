@@ -10,6 +10,9 @@ import (
 // Key is a public or private key used by WireGuard.
 type Key = wgtypes.Key
 
+// PeerFilter is a filter that can be applied to peers.
+type PeerFilter func(Peer) bool
+
 // Peer is a WireGuard peer.
 type Peer struct {
 	Name        string

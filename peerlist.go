@@ -33,3 +33,14 @@ func (list PeerList) Less(i, j int) bool {
 func (list PeerList) Swap(i, j int) {
 	list[i], list[j] = list[j], list[i]
 }
+
+// Match returns the set of peers that match the given filter.
+func (list PeerList) Match(filter PeerFilter) PeerList {
+	filtered := make(PeerList, 0, len(list))
+	for _, peer := range list {
+		if filter(peer) {
+			filtered = append(filtered, peer)
+		}
+	}
+	return filtered
+}
